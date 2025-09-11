@@ -10,11 +10,11 @@ const Home = () => {
   const dispatch = useDispatch();
   const [socket, setSocket] = useState(null);
   let { selectedChatId, chats, Messages } = useSelector((state) => state.chat);
-  console.log("Selected Chat ID:", selectedChatId);
   const socketInstance = io("http://localhost:3000/", {
     withCredentials: true,
   });
-
+  
+  console.log("Selected Chat ID:", selectedChatId);
   useEffect(() => {
     // console.log("Active Chat Messages:", activeMessages);
     dispatch(Chatfetch());

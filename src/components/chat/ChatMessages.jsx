@@ -1,12 +1,20 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ChatMessage.css';
+import './ButtonAnimation.css';
+import {createNewchats } from '../../store/actions/chataction.jsx'
+
 import { selectedChatIde } from '../../store/Slicees/chatSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewMessage } from '../../store/Slicees/chatSlice';
+import { FiMessageSquare, FiCpu } from 'react-icons/fi';
+
 
  // problem is chat input ke vaja se component re render ho rha hae  or messages to use react.memo use karna padega ya fir react-hook-form use karna padega ya fir ref use karna padega
 
 export default function ChatMessages({Messages ,socketInstance,socket,desktop}) {
+  
+  const [open,setopen]= useState(false)
+
   const dispatch = useDispatch();
   const [messages, setMessages] = useState(Messages);
   const chatId = useSelector((state) => state.chat.selectedChatId);
@@ -14,7 +22,21 @@ export default function ChatMessages({Messages ,socketInstance,socket,desktop}) 
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
  const messagesContainerRef = useRef(null);
+const handleNewChat = () => {
+    const title = prompt('Enter chat title:');
+    if (!title) return;
 
+    console.log(title)
+    dispatch (createNewchats(
+      {
+      tittle:title
+    }
+    ))
+  
+    
+    
+    
+  };
   useEffect(() => {
     const handleAiResponse = (data) => {
       console.log("AI Response:", data);
@@ -103,7 +125,9 @@ export default function ChatMessages({Messages ,socketInstance,socket,desktop}) 
         </div>
 
         {/* input messages */}
-        <div className="chat-slider-input">
+        <div style={{
+          
+        }} className="chat-slider-input">
           <input
             type="text"
             value={input}
@@ -113,10 +137,25 @@ export default function ChatMessages({Messages ,socketInstance,socket,desktop}) 
           >
 
           </input>
-         {desktop&&
-         <button onClick={handleSend}>Send</button>
+         {desktop ?
+         <button className='inputbutton' onClick={handleSend}>Send</button>
+         :
+         <button className={`plusop ${open ? 'open' : ''}`} onClick={()=>setopen(!open)}>
+           <span className="plus-icon"></span>
+         </button>
+
          } 
-         {/* <button onClick={handleSend}>Send</button> */}
+
+         <div className={`menu-popup ${open ? 'visible' : ''}`}>
+           <div onClick={handleNewChat} className="menu-item">
+             <FiMessageSquare className="menu-icon" />
+             <span>Create chat</span>
+           </div>
+           <div className="menu-item">
+             <FiCpu className="menu-icon" />
+             <span>Select model</span>
+           </div>
+         </div>
 
         </div>
       </div>
