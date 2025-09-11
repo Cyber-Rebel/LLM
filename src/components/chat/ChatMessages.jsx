@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, use } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './ChatSlider.css';
 import { selectedChatIde } from '../../store/Slicees/chatSlice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,7 +6,7 @@ import { addNewMessage } from '../../store/Slicees/chatSlice';
 
  // problem is chat input ke vaja se component re render ho rha hae  or messages to use react.memo use karna padega ya fir react-hook-form use karna padega ya fir ref use karna padega
 
-export default function ChatMessages({Messages ,socketInstance,socket}) {
+export default function ChatMessages({Messages ,socketInstance,socket,desktop}) {
   const dispatch = useDispatch();
   const [messages, setMessages] = useState(Messages);
   const chatId = useSelector((state) => state.chat.selectedChatId);
@@ -26,7 +26,7 @@ export default function ChatMessages({Messages ,socketInstance,socket}) {
       }));
       if(data){
 
-        setLoading(false);
+        setLoading(false);  
       }
     };
 
@@ -71,8 +71,16 @@ export default function ChatMessages({Messages ,socketInstance,socket}) {
   return (
     <div className=''>
    
-      <div className={`chat-slider${open ? ' open' : ''}`}>
-        <div className="chat-slider-header"> Cyber-ai</div>
+      <div style={{
+        width: desktop ? '80%' : '100%'
+      }} className={`chat-slider open   ` }>
+
+        <div className="chat-slider-header"> 
+          <span className='px-7'>
+
+          Cyber-ai
+          </span>
+          </div>
         <div className="chat-slider-messages" ref={messagesContainerRef}>
           {Messages.map((msg, idx) => (
             <div
