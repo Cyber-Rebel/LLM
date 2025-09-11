@@ -1,0 +1,81 @@
+.markdown-content {
+  width: 100%;
+}
+
+.markdown-content code {
+  font-family: 'Consolas', 'Monaco', monospace;
+  background-color: #2d2d2d;
+  padding: 2px 4px;
+  border-radius: 3px;
+}
+
+.markdown-content pre {
+  margin: 1rem 0;
+  background-color: #1e1e1e;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.markdown-content pre code {
+  background-color: transparent;
+  padding: 0;
+}
+
+.markdown-content p {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.markdown-content li {
+  margin-bottom: 0.25rem;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4 {
+  margin: 1rem 0 0.5rem 0;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markdown-content h1 { font-size: 1.5rem; }
+.markdown-content h2 { font-size: 1.25rem; }
+.markdown-content h3 { font-size: 1.1rem; }
+.markdown-content h4 { font-size: 1rem; }
+
+.markdown-content a {
+  color: #0a7cff;
+  text-decoration: underline;
+}
+
+.markdown-content blockquote {
+  border-left: 4px solid #444;
+  margin: 1rem 0;
+  padding-left: 1rem;
+  color: #a0a0a0;
+}
+
+.markdown-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.markdown-content th,
+.markdown-content td {
+  border: 1px solid #444;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.markdown-content th {
+  background-color: #2d2d2d;
+}
