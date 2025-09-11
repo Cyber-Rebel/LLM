@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import './ChatSlider.css';
+import './ChatMessage.css';
 import { selectedChatIde } from '../../store/Slicees/chatSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { addNewMessage } from '../../store/Slicees/chatSlice';
@@ -113,7 +113,11 @@ export default function ChatMessages({Messages ,socketInstance,socket,desktop}) 
           >
 
           </input>
-          <button onClick={handleSend}>Send</button>
+         {desktop&&
+         <button onClick={handleSend}>Send</button>
+         } 
+         {/* <button onClick={handleSend}>Send</button> */}
+
         </div>
       </div>
     </div>

@@ -36,7 +36,8 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
   
   
   return (
-    <><div className='w-screen relative     ' >
+    <><div className='w-full relative      ' >
+
     {
       desktop ? (
             <div>
@@ -84,7 +85,7 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
       <>
       
         
-        <div className='absolute z-10 w-[54%]     h-auto '>
+        <div className='absolute z-10 w-[54%]      overflow-y-auto '>
           <div className='px-1 py-2'>
           <button 
   onClick={() => setopen(!open)} 
@@ -93,21 +94,16 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
   {open?<MdOutlineRestaurantMenu />:<HiOutlineMenuAlt1 />} 
 </button>
 
-{/* <button 
-  onClick={handleNewChat} 
-  className="ml-2 px-4 py-2 rounded-2xl bg-amber-400 text-black font-medium shadow-md hover:bg-amber-500 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-amber-300 transition-all duration-300 ease-in-out"
->
-  New Chat
-</button> */}
+
           </div>
 {open&&
            <div className=' bg-[#484956]'>
-           <div className=' w-full h-screen'>
+           <div onClick={()=>setopen(!open)} className=' w-full h-screen  overflow-y-scroll     '>
             {chats.map((chat) => (
             <button
               key={chat?._id}
               onClick={()=>objectid(chat)}
-              className={` w-full flex overflow-x-hidden text-left px-3 py-2 rounded-lg mb-1  transition font-medium ${
+              className={` w-full flex overflow-x-hidden text-left px-3 py-2 rounded-lg mb-1    transition font-medium ${
                 chat._id === selectedChatId
                   ? 'bg-[#343541] text-white'
                   : 'text-gray-200 hover:bg-[#232428]'
@@ -116,6 +112,7 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
     {chat.tittle}
             </button>
           ))} 
+
           </div>
           </div>
           }
