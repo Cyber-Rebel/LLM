@@ -76,7 +76,6 @@
 }
 .chat-message.model {
   align-self: flex-start; 
-  background: #444654;
   color: #fff;
 }
 .chat-slider-input {

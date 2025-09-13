@@ -42,8 +42,8 @@ console.log(desktop)
     <ChatSlider desktop={desktop} chats={chats} selectedChatId={selectedChatId} />
     
       
-      <ChatMessages desktop={desktop}  Messages={Messages} socketInstance={socketInstance} socket={socket}    />
-    </>
+      <ChatMessages desktop={desktop}  Messages={Messages} socketInstance={socketInstance} socket={socket} selectedChatId={selectedChatId}    />
+    </> 
   );
 };
 

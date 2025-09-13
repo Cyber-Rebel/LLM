@@ -3,9 +3,8 @@ import { useDispatch } from 'react-redux';
 import {createNewchats, Messagesfetch } from '../store/actions/chataction.jsx'
 import { HiOutlineMenuAlt1  } from "react-icons/hi";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
-import { LuBadgePlus } from "react-icons/lu";
 const ChatSlider = ({chats,selectedChatId,desktop}) => {
-  const[open ,setopen]= useState(false)
+  const[open ,setopen]= useState(true)
   const dispacth = useDispatch()
   const handleNewChat = () => {
     const title = prompt('Enter chat title:');
@@ -36,7 +35,7 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
   
   
   return (
-    <><div className='w-full relative      ' >
+    <><div className=' relative      ' >
 
     {
       desktop ? (
@@ -51,7 +50,7 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
               onClick={handleNewChat}
               className="px-10 py-10 bg-[#232428] rounded text-gray-300 hover:bg-[#343541] text-xs"
             >
-              + New
+              + create new
             </button>
           
           </div>
@@ -85,38 +84,47 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
       <>
       
         
-        <div className='absolute z-10 w-[54%]      overflow-y-auto '>
-          <div className='px-1 py-2'>
-          <button 
-  onClick={() => setopen(!open)} 
-  className=" py-2 text-3xl text-black font-medium shadow-md   focus:outline-none     transition-all duration-300 ease-in-out"
->
-  {open?<MdOutlineRestaurantMenu />:<HiOutlineMenuAlt1 />} 
-</button>
-
-
-          </div>
-{open&&
-           <div className=' bg-[#484956]'>
-           <div onClick={()=>setopen(!open)} className=' w-full h-screen  overflow-y-scroll     '>
-            {chats.map((chat) => (
-            <button
-              key={chat?._id}
-              onClick={()=>objectid(chat)}
-              className={` w-full flex overflow-x-hidden text-left px-3 py-2 rounded-lg mb-1    transition font-medium ${
-                chat._id === selectedChatId
-                  ? 'bg-[#343541] text-white'
-                  : 'text-gray-200 hover:bg-[#232428]'
-              }`}
+        {/* Mobile menu button is always on top and clickable */}
+        <button
+          style={{ position: 'fixed', left: 5, top: '26%' , zIndex: 1002 }}
+          onClick={() => setopen(!open)}
+          className={`rounded-full text-white shadow-lg text-3xl  focus:outline-none transition-all duration-300 ease-in-out ${open ? 'rotate-90' : ''}`}
+        >
+          {open ? <MdOutlineRestaurantMenu /> : <HiOutlineMenuAlt1 />}
+        </button>
+        {/* Overlay and menu are below the button */}
+        {open && (
+          <>
+            <div
+              className="fixed inset-0 bg-black/40 z-50"
+              onClick={() => setopen(!open)}
+              style={{ transition: 'background 0.3s' }}
+            />
+            <div
+              className="fixed left-0 top-2 w-[80vw] max-w-xs h-[98%] bg-[#232428] shadow-2xl rounded-r-2xl p-0 pt-8 flex flex-col gap-2 z-50 transition-all duration-300 ease-in-out"
+              style={{ minWidth: '220px', transform: open ? 'translateX(0)' : 'translateX(-100%)', opacity: open ? 1 : 0 }}
             >
-    {chat.tittle}
-            </button>
-          ))} 
-
-          </div>
-          </div>
-          }
-        </div>
+              <div className="flex-1 overflow-y-auto px-4 py-6">
+                {chats.length === 0 && (
+                  <div className="text-gray-400 text-center py-8">No chats yet</div>
+                )}
+                {chats.map((chat) => (
+                  <button
+                    key={chat?._id}
+                    onClick={() => { objectid(chat); setopen(false); }}
+                    className={`w-full flex items-center gap-2 text-left px-4 py-3 rounded-xl mb-2 font-medium transition-all duration-200 ${
+                      chat._id === selectedChatId
+                        ? 'bg-[#343541] text-white shadow'
+                        : 'text-gray-200 hover:bg-[#343541]/80 hover:text-white'
+                    }`}
+                  >
+                    <span className="truncate">{chat.tittle}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
         </>
       )
     }
