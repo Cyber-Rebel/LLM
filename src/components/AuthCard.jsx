@@ -1,7 +1,7 @@
 import React from 'react'
 
 const AuthCard = ({ children, title, subtitle }) => (
-  <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-950 via-gray-900 to-gray-800 p-6">
+<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#232323]  via-[#292929] to-[#2E2E2E] p-6">
     <div className="w-full max-w-md bg-gray-900/60 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-700/40 p-8">
       {title && (
         <div className="mb-6">
@@ -15,3 +15,4 @@ const AuthCard = ({ children, title, subtitle }) => (
 )
 
 export default AuthCard
+  

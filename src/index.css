@@ -1,1 +1,31 @@
   @import "tailwindcss";
+/* Messages Container Scrollbar */
+.chat-slider-messages {
+  overflow-y: auto;
+  max-height: 80vh; /* adjust as needed */
+}
+
+/* Custom scrollbar */
+.chat-slider-messages::-webkit-scrollbar {
+  width: 8px; /* scrollbar ki width */
+}
+
+.chat-slider-messages::-webkit-scrollbar-track {
+  background: #1e1e1e; /* track ka color */
+  border-radius: 10px;
+}
+
+.chat-slider-messages::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #383838, #2c2c2c); /* blue to purple gradient */
+  border-radius: 10px;
+}
+
+.chat-slider-messages::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #8f8f8f, #121212); /* hover effect */
+}
+
+/* For Firefox */
+.chat-slider-messages {
+  scrollbar-width: thin;
+  scrollbar-color: #2e2e2e #1e1e1e;
+}

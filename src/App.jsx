@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 const App = () => {
   const userdata= useSelector(state=>state.user)
   //  console.log("userdata",userdata)
+  console.log("isAuthenticated",userdata?.id)
   return (
     <>
    

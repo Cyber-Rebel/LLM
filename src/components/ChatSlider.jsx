@@ -3,8 +3,10 @@ import { useDispatch } from 'react-redux';
 import {createNewchats, Messagesfetch } from '../store/actions/chataction.jsx'
 import { HiOutlineMenuAlt1  } from "react-icons/hi";
 import { MdOutlineRestaurantMenu } from "react-icons/md";
+import './ChatSlider.css';
+
 const ChatSlider = ({chats,selectedChatId,desktop}) => {
-  const[open ,setopen]= useState(true)
+  const[open ,setopen]= useState(false)
   const dispacth = useDispatch()
   const handleNewChat = () => {
     const title = prompt('Enter chat title:');
@@ -41,7 +43,7 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
       desktop ? (
             <div>
       {/* Sidebar */}
-      <div className="md:w-[20%]  h-screen bg-[#18191c] border-r border-[#333] flex flex-col">
+      <div className="md:w-[20%]  h-screen bg-[#181818] border-r border-[#303030] flex flex-col">
         {/* Header */}
         <div className="px-3 pb-2 text-xs text-gray-400 font-semibold flex justify-between items-center">
           Chats
@@ -57,7 +59,7 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
         </div>
 
         {/* Chat list (scrollable) */}
-        <div  className="flex-1 overflow-y-auto px-2">
+        <div  className="flex-1 chat-list  overflow-y-auto px-2 ">
           {chats.length === 0 && (
             <div className="text-gray-500 text-sm px-3 py-4">No chats yet</div>
           )}
@@ -86,7 +88,7 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
         
         {/* Mobile menu button is always on top and clickable */}
         <button
-          style={{ position: 'fixed', left: 5, top: '26%' , zIndex: 1002 }}
+          style={{ position: 'fixed', left: 5, top: 36 , zIndex: 1002 }}
           onClick={() => setopen(!open)}
           className={`rounded-full text-white shadow-lg text-3xl  focus:outline-none transition-all duration-300 ease-in-out ${open ? 'rotate-90' : ''}`}
         >
@@ -101,7 +103,7 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
               style={{ transition: 'background 0.3s' }}
             />
             <div
-              className="fixed left-0 top-2 w-[80vw] max-w-xs h-[98%] bg-[#232428] shadow-2xl rounded-r-2xl p-0 pt-8 flex flex-col gap-2 z-50 transition-all duration-300 ease-in-out"
+              className="fixed left-0 top-2 w-[80vw] max-w-xs h-[98%] bg-[#181818] shadow-2xl rounded-r-2xl p-0 pt-8 flex flex-col gap-2 z-50 transition-all duration-300 ease-in-out"
               style={{ minWidth: '220px', transform: open ? 'translateX(0)' : 'translateX(-100%)', opacity: open ? 1 : 0 }}
             >
               <div className="flex-1 overflow-y-auto px-4 py-6">

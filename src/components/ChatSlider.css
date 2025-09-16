@@ -1,0 +1,23 @@
+/* Scrollbar styles only for ChatSlider */
+.chat-list {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #636363 #18191c;
+}
+
+.chat-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-list::-webkit-scrollbar-track {
+  background: #18191c;
+  border-radius: 10px;
+}
+
+.chat-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #4a4a4a, #282828);
+  border-radius: 10px;
+}
+
+.chat-list::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #4a4a4a, #282828);
+}
