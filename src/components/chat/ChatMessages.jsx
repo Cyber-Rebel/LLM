@@ -275,7 +275,7 @@ export default function ChatMessages({
                 placeholder="Message cyber-ai..."
                 className="w-full resize-none border border-[#3d3d3d] bg-[#2d2d2d] text-gray-200 placeholder-gray-500 rounded-2xl px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[52px] max-h-32"
                 rows={1}
-                disabled={loading}
+                disabled={loading} // loading ke wakt disapble hoga
               />
               <button
                 onClick={handleSend}

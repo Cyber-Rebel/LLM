@@ -8,6 +8,8 @@ import { io } from "socket.io-client";
 import { Chatfetch, Messagesfetch } from "../store/actions/chataction.jsx";
 import {authenticateUser} from "../store/actions/useraction.jsx"
 
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
 const Home = () => {
   const [desktop,setdesktop ] = useState(window.innerWidth >= 768); // Example: true if width >= 768px 1089>768 1089 sppose laptop
   const dispatch = useDispatch();
@@ -15,7 +17,7 @@ const Home = () => {
   const userDetails = useSelector((state) => state.user);
   console.log(userDetails)
   let { selectedChatId, chats, Messages } = useSelector((state) => state.chat);
-  const socketInstance = io("http://localhost:3000/", {
+  const socketInstance = io(BASE_URL, {
     withCredentials: true,
   });
   

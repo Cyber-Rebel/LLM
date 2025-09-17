@@ -12,13 +12,16 @@ return (
     
         <Routes>
          {/* If logged in → Home, else → Login */}
-    <Route path="/" element={user ? <Home /> : <Login/>} />
+    {/* <Route path="/" element={user ? <Home /> : <Login/>} />
 
     {/* If not logged in → Login, else → Home */}
-    <Route path="/login" element={!user ? <Login /> : <Home />} />
+    {/* <Route path="/login" element={!user ? <Login /> : <Home />} /> */}
 
     {/* If not logged in → Register, else → Home */}
-    <Route path="/register" element={!user ? <Register /> : <Home />} />
+    {/* <Route path="/register" element={!user ? <Register /> : <Home />} /> */} 
+    <Route path="/login" element={<Login/>} />
+    <Route path="/register" element={<Register/>} />
+    <Route path="/" element={<Home/>} />
 
 
         </Routes>

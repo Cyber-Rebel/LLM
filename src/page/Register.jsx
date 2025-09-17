@@ -36,7 +36,7 @@ console.log(datas)
         alert('Invalid Register cheak details ')
         return 
       }
-      navigate('/')
+      navigate('/ ')
 
     reset()
    }
