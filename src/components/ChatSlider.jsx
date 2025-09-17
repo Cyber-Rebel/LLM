@@ -1,13 +1,16 @@
 import React, {  useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {createNewchats, Messagesfetch } from '../store/actions/chataction.jsx'
-import { HiOutlineMenuAlt1  } from "react-icons/hi";
-import { MdOutlineRestaurantMenu } from "react-icons/md";
+import { HiOutlineMenuAlt1, HiPlus, HiChat, HiDotsVertical } from "react-icons/hi";
+import { MdOutlineRestaurantMenu, MdDelete, MdEdit } from "react-icons/md";
+import { FiMessageSquare, FiEdit3, FiTrash2, FiSearch, FiUser } from "react-icons/fi";
+import { RiMessage3Line } from "react-icons/ri";
 import './ChatSlider.css';
 
-const ChatSlider = ({chats,selectedChatId,desktop}) => {
+const ChatSlider = ({chats,selectedChatId,desktop, userDetails}) => {
   const[open ,setopen]= useState(false)
   const dispacth = useDispatch()
+  
   const handleNewChat = () => {
     const title = prompt('Enter chat title:');
     if (!title) return;
@@ -18,10 +21,6 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
       tittle:title
     }
     ))
-  
-    
-    
-    
   };
 
   const objectid=(data)=>{
@@ -31,109 +30,175 @@ const ChatSlider = ({chats,selectedChatId,desktop}) => {
     // }))
     // console.log(data._id)
     dispacth (Messagesfetch(data._id))
-
-
   }
-  
+
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Today';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffTime = Math.abs(now - date);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    if (diffDays === 1) return 'Today';
+    if (diffDays === 2) return 'Yesterday';
+    if (diffDays <= 7) return `${diffDays} days ago`;
+    return date.toLocaleDateString();
+  };
+
+  const truncateTitle = (title, maxLength = 30) => {
+    if (!title) return 'New Chat';
+    return title.length > maxLength ? title.substring(0, maxLength) + '...' : title;
+  };
   
   return (
-    <><div className=' relative      ' >
+    <>
+      {/* Mobile Menu Button */}
+      {!desktop && (
+        <button
+          onClick={() => setopen(!open)}
+          className="fixed top-4 left-4 z-50 p-2 bg-[#2d2d2d] text-gray-300 rounded-lg hover:bg-[#3d3d3d] transition-colors duration-200"
+        >
+          {open ? <MdOutlineRestaurantMenu size={24} /> : <HiOutlineMenuAlt1 size={24} />}
+        </button>
+      )}
 
-    {
-      desktop ? (
-            <div>
+      {/* Overlay for mobile */}
+      {!desktop && open && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30"
+          onClick={() => setopen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="md:w-[20%]  h-screen bg-[#181818] border-r border-[#303030] flex flex-col">
+      <div className={`
+        ${desktop ? 'relative' : 'fixed'} 
+        ${desktop ? 'translate-x-0' : open ? 'translate-x-0' : '-translate-x-full'}
+        ${desktop ? 'w-64' : 'w-64'}
+        h-screen bg-[#171717] border-r border-[#2d2d2d] 
+        transform transition-transform duration-300 ease-in-out z-40
+        flex flex-col
+      `}>
         {/* Header */}
-        <div className="px-3 pb-2 text-xs text-gray-400 font-semibold flex justify-between items-center">
-          Chats
-          <div className="flex gap-2">
-            <button
-              onClick={handleNewChat}
-              className="px-10 py-10 bg-[#232428] rounded text-gray-300 hover:bg-[#343541] text-xs"
-            >
-              + create new
-            </button>
+        <div className="p-4 border-b border-[#2d2d2d]">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-lg font-semibold text-gray-200">cyber-ai</h1>
+            {!desktop && (
+              <button
+                onClick={() => setopen(false)}
+                className="p-1 hover:bg-[#2d2d2d] text-gray-400 rounded-md transition-colors duration-200"
+              >
+                <MdOutlineRestaurantMenu size={20} />
+              </button>
+            )}
+          </div>
           
+          {/* New Chat Button */}
+          <button
+            onClick={handleNewChat}
+            className="w-full flex items-center gap-3 px-3 py-3 bg-[#2d2d2d] hover:bg-[#3d3d3d] text-gray-200 rounded-lg transition-all duration-200 group"
+          >
+            <HiPlus size={18} className="group-hover:rotate-90 transition-transform duration-200" />
+            New chat
+          </button>
+        </div>
+
+        {/* Navigation Items */}
+        <div className="p-2 space-y-1 border-b border-[#2d2d2d]">
+          <div className="flex items-center gap-3 p-3 text-gray-300 hover:bg-[#2d2d2d] rounded-lg cursor-pointer transition-colors">
+            <FiSearch className="w-4 h-4" />
+            <span className="text-sm">Search chats</span>
+          </div>
+          <div className="flex items-center gap-3 p-3 text-gray-300 hover:bg-[#2d2d2d] rounded-lg cursor-pointer transition-colors hover:cursor-not-allowed">
+            <RiMessage3Line className="w-4 h-4" />
+            <span className="text-sm">New Project</span>
           </div>
         </div>
 
-        {/* Chat list (scrollable) */}
-        <div  className="flex-1 chat-list  overflow-y-auto px-2 ">
-          {chats.length === 0 && (
-            <div className="text-gray-500 text-sm px-3 py-4">No chats yet</div>
-          )}
-
-          {chats.map((chat) => (
-            <button
-              key={chat?._id}
-              onClick={()=>objectid(chat)}
-              className={`w-full text-left px-3 py-2 rounded-lg mb-1 truncate transition font-medium ${
-                chat._id === selectedChatId
-                  ? 'bg-[#343541] text-white'
-                  : 'text-gray-200 hover:bg-[#232428]'
-              }`}
-            >
-    {chat.tittle}
-            </button>
-          ))}
-        </div>
-      </div>
-
-     
-    </div>
-      ):(
-      <>
-      
-        
-        {/* Mobile menu button is always on top and clickable */}
-        <button
-          style={{ position: 'fixed', left: 5, top: 36 , zIndex: 1002 }}
-          onClick={() => setopen(!open)}
-          className={`rounded-full text-white shadow-lg text-3xl  focus:outline-none transition-all duration-300 ease-in-out ${open ? 'rotate-90' : ''}`}
-        >
-          {open ? <MdOutlineRestaurantMenu /> : <HiOutlineMenuAlt1 />}
-        </button>
-        {/* Overlay and menu are below the button */}
-        {open && (
-          <>
-            <div
-              className="fixed inset-0 bg-black/40 z-50"
-              onClick={() => setopen(!open)}
-              style={{ transition: 'background 0.3s' }}
-            />
-            <div
-              className="fixed left-0 top-2 w-[80vw] max-w-xs h-[98%] bg-[#181818] shadow-2xl rounded-r-2xl p-0 pt-8 flex flex-col gap-2 z-50 transition-all duration-300 ease-in-out"
-              style={{ minWidth: '220px', transform: open ? 'translateX(0)' : 'translateX(-100%)', opacity: open ? 1 : 0 }}
-            >
-              <div className="flex-1 overflow-y-auto px-4 py-6">
-                {chats.length === 0 && (
-                  <div className="text-gray-400 text-center py-8">No chats yet</div>
-                )}
+        {/* Chat List */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="p-2">
+            {!chats || chats.length === 0 ? (
+              <div className="text-center py-8">
+                <RiMessage3Line size={32} className="text-gray-600 mx-auto mb-3" />
+                <p className="text-gray-500 text-sm">No conversations yet</p>
+                <p className="text-gray-600 text-xs mt-1">Start a new chat to begin</p>
+              </div>
+            ) : (
+              <div className="space-y-1">
+                <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wide px-3 py-2">
+                  Today
+                </h3>
                 {chats.map((chat) => (
-                  <button
-                    key={chat?._id}
-                    onClick={() => { objectid(chat); setopen(false); }}
-                    className={`w-full flex items-center gap-2 text-left px-4 py-3 rounded-xl mb-2 font-medium transition-all duration-200 ${
-                      chat._id === selectedChatId
-                        ? 'bg-[#343541] text-white shadow'
-                        : 'text-gray-200 hover:bg-[#343541]/80 hover:text-white'
-                    }`}
+                  <div
+                    key={chat._id}
+                    onClick={() => objectid(chat)}
+                    className={`
+                      group relative cursor-pointer p-3 rounded-lg transition-all duration-200
+                      ${selectedChatId === chat._id 
+                        ? 'bg-[#2d2d2d] text-white' 
+                        : 'text-gray-300 hover:bg-[#2d2d2d]'
+                      }
+                    `}
                   >
-                    <span className="truncate">{chat.tittle}</span>
-                  </button>
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3">
+                          <RiMessage3Line size={16} className="flex-shrink-0" />
+                          <span className="text-sm font-medium truncate">
+                            {truncateTitle(chat.tittle || chat.title)}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Action Buttons */}
+                      <div className="flex items-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // Add edit functionality
+                          }}
+                          className="p-1 hover:bg-[#3d3d3d] rounded transition-colors duration-200"
+                          title="Rename chat"
+                        >
+                          <FiEdit3 size={12} className="text-gray-400" />
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // Add delete functionality
+                          }}
+                          className="p-1 hover:bg-[#3d3d3d] rounded transition-colors duration-200 ml-1"
+                          title="Delete chat"
+                        >
+                          <FiTrash2 size={12} className="text-gray-400" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 ))}
               </div>
+            )}
+          </div>
+        </div>
+
+        {/* Footer/User Section */}
+        <div className="p-4 border-t border-[#2d2d2d]">
+          <div className="flex items-center gap-3 p-3 text-gray-300 hover:bg-[#2d2d2d] rounded-lg cursor-pointer transition-colors">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white text-sm font-medium">
+            <img src={`${userDetails.avatarimage}`} alt="" />
             </div>
-          </>
-        )}
-        </>
-      )
-    }
-    </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate">{userDetails.firstName}</p>
+              <p className="text-xs text-gray-500">Free plan</p>
+            </div>
+            <HiDotsVertical className="w-4 h-4" />
+          </div>
+        </div>
+      </div>
     </>
   );
 };
-// 
+
 export default ChatSlider;
 

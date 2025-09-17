@@ -5,18 +5,22 @@ import FormInput from '../components/FormInput'
 import PasswordInput from '../components/PasswordInput'
 import { loginUser } from '../store/actions/useraction'
 import { useDispatch } from 'react-redux'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
+
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   
   const handleSubmit = async(e) => {
     e.preventDefault()
+    setLoading(true)
 
     try{
-
-    const iscorrectrepo= await  dispatch(loginUser({ 
+      const iscorrectrepo= await  dispatch(loginUser({ 
         email: email,
         password: password
       })) 
@@ -29,49 +33,120 @@ const Login = () => {
     }catch(err){
       console.log(err)
       alert(err);
-      
+    } finally {
+      setLoading(false)
     }
-    
   }
   
   return (
-    <AuthCard title="Login to Cyber AI" subtitle="Sign in to continue your conversation with Cyber AI and access saved chats.">
-      <form
-        className="mt-2 space-y-6"
-        onSubmit={handleSubmit}
-      >
-        <FormInput
-          onChange={(e) => setEmail(e.target.value)}
-          id="email"
-          label="Email"
-          placeholder="your.email@example.com"
-          icon={
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-gray-300" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M10 12a5 5 0 100-10 5 5 0 000 10z" />
-              <path d="M2 18a8 8 0 0116 0" />
-            </svg>
-          }
-        />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h1>
+          <p className="text-gray-600">Sign in to continue your AI conversations</p>
+        </div>
 
-        <PasswordInput 
-          id="password" 
-          label="Password" 
-          placeholder="Enter your password" 
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        {/* Main Card */}
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Email */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="w-full px-4 py-3 border border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-gray-300"
+                placeholder="Enter your email"
+              />
+            </div>
 
-        <div className="flex items-center">
-          <div className="flex items-center space-x-3">
-            <button type="submit" className="px-6 py-2 rounded-full bg-indigo-600 text-white font-medium shadow-md hover:bg-indigo-700 transition">
-              Login
+            {/* Password */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 pr-12 border border-gray-200 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-gray-300"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                >
+                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Forgot Password */}
+            <div className="text-right">
+              <Link
+                to="/forgot-password"
+                className="text-sm text-blue-600 hover:text-blue-700 transition-colors duration-200"
+              >
+                Forgot your password?
+              </Link>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 ${
+                loading
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-0.5'
+              } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Signing In...
+                </div>
+              ) : (
+                'Sign In'
+              )}
             </button>
-            <Link to="/register" className="px-6 py-2 rounded-full border border-gray-700 text-indigo-300 hover:bg-gray-800 transition inline-flex items-center justify-center">
-              Create account
-            </Link>
+          </form>
+
+          {/* Register Link */}
+          <div className="mt-6 text-center">
+            <p className="text-gray-600">
+              Don't have an account?{' '}
+              <Link
+                to="/register"
+                className="text-blue-600 hover:text-blue-700 font-semibold transition-colors duration-200"
+              >
+                Create account
+              </Link>
+            </p>
           </div>
         </div>
-      </form>
-    </AuthCard>
+
+        {/* Footer */}
+        <div className="text-center mt-8">
+          <p className="text-xs text-gray-500">
+            By signing in, you agree to our Terms of Service and Privacy Policy
+          </p>
+        </div>
+      </div>
+    </div>
   )
 }
 

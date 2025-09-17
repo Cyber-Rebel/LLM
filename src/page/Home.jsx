@@ -1,4 +1,6 @@
-  import { use, useEffect, useState } from "react";
+
+
+import {  useEffect, useState } from "react";
 import ChatSlider from "../components/ChatSlider.jsx";
 import ChatMessages from "../components/chat/ChatMessages.jsx";
 import { useSelector, useDispatch } from "react-redux";
@@ -40,12 +42,23 @@ const Home = () => {
 
 console.log(desktop)
 
-
   return (
-    <> 
-    <ChatSlider desktop={desktop} chats={chats} selectedChatId={selectedChatId} />
-      <ChatMessages desktop={desktop} userDetails={userDetails} Messages={Messages} socketInstance={socketInstance} socket={socket} selectedChatId={selectedChatId}    />
-    </> 
+    <div className="flex h-screen bg-[#212121] overflow-hidden">
+      {/* Sidebar */}
+      <ChatSlider userDetails={userDetails} desktop={desktop} chats={chats} selectedChatId={selectedChatId} />
+      
+      {/* Main Chat Area */}
+      <div className={`flex-1 flex flex-col ${!desktop ? 'w-full' : ''} relative bg-[#212121]`}>
+        <ChatMessages 
+          desktop={desktop} 
+          userDetails={userDetails} 
+          Messages={Messages} 
+          socketInstance={socketInstance} 
+          socket={socket} 
+          selectedChatId={selectedChatId}    
+        />
+      </div>
+    </div>
   );
 };
 

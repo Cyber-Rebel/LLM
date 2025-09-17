@@ -6,7 +6,7 @@ const initialState = {
   lastName: "",
   email: "",
   avatarimage: "",
-  isAuthenticated: false,
+
 }
 const userSlice = createSlice({
     name: 'user',
@@ -18,7 +18,7 @@ const userSlice = createSlice({
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
       state.avatarimage= action.payload.avatarimage;
-      
+       sessionStorage.setItem("user", true);
     },
 
 
@@ -30,7 +30,7 @@ const userSlice = createSlice({
       state.firstName = "";
       state.lastName = "";
       state.email = "";
-   
+    sessionStorage.setItem("user", null);
     }
 
 

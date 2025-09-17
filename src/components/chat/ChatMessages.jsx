@@ -1,4 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+// fibot
+//fisetings
+
+  import React, { useState, useRef, useEffect } from "react";
 import "./ChatMessage.css";
 import "./ButtonAnimation.css";
 import { createNewchats } from "../../store/actions/chataction.jsx";
@@ -6,7 +9,8 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useDispatch, useSelector } from "react-redux";
 import { addNewMessage } from "../../store/Slicees/chatSlice";
-import { FiMessageSquare, FiCpu } from "react-icons/fi";
+import { FiMessageSquare, FiCpu, FiSend, FiUser,  } from "react-icons/fi";
+import { HiSparkles, HiLightningBolt } from "react-icons/hi";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
@@ -29,7 +33,6 @@ export default function ChatMessages({
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const messagesContainerRef = useRef(null);
-
   const handleNewChat = () => {
     const title = prompt("Enter chat title:");
     if (!title) return;
@@ -93,203 +96,208 @@ export default function ChatMessages({
     setOpenModelPopup(false);
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  const models = [
+    { id: 'gemini', name: 'Gemini Pro', icon: <HiSparkles />, color: 'bg-blue-500' },
+    { id: 'gpt-4', name: 'GPT-4', icon: <HiLightningBolt />, color: 'bg-green-500' },
+    { id: 'claude', name: 'Claude', icon: <FiCpu />, color: 'bg-purple-500' },
+  ];
+
   return (
-    <div className="">
-      <div
-        style={{
-          width: desktop ? "80%" : "100%",
-        }}
-        className={`chat-slider open`}
-      >
-        {/* Header */}
-        <div className="chat-slider-header flex items-center justify-between gap-4 px-20 py-12">
-          <span className="font-mono px-10 font-semibold text-white">
-            cyber-ai
-          </span>
-
-          {desktop && (
-            <div className="w-[30%] mr-[20%] border">
-              <select
-                onChange={(e) => setSelectedModel(e.target.value)}
-                className="rounded-lg w-full bg-transparent text-white px-3 py-1 focus:outline-none"
-                value={selectedModel}
-              >
-                <option
-                  className=" bg-[#414242] rounded-md"
-                  value="gemini"
-                >
-                  Gemini 2.0
-                </option>
-                <option
-                  className="bg-[#414242] rounded-md "
-                  value="openai"
-                >
-                  OpenAI Model
-                </option>
-              </select>
+    <div className="flex flex-col h-full bg-[#212121]">
+      {/* Header */}
+      <div className="border-b border-[#2d2d2d] bg-[#212121] px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+            <img src="logo3.png" alt="" />
+              <div className="text-white" size={16} />
             </div>
-          )}
-
-          {/* Profile */}
-          <div className="relative flex flex-col items-center justify-end">
-            <button className="focus:outline-none">
-              <div className="w-10 h-10 mt-[3px] rounded-full border-2 border-[#65aba9] flex items-center justify-center bg-[#232428]">
-                <img src={`${userDetails.avatarimage}`} alt="" />
-              </div>
-            </button>
-            <span
-              className="mt-1 text-[#88bdf1] font-semibold text-base"
-              style={{ letterSpacing: "2px" }}
+            <div>
+              <h1 className="font-semibold text-gray-200">cyber-ai</h1>
+              <p className="text-sm text-gray-400">
+                {selectedModel === 'gemini' ? 'Gemini Pro' : 
+                 selectedModel === 'gpt-4' ? 'GPT-4' : 'Claude'} <span className="text-green-400">•</span> Online
+              </p>
+            </div>
+          </div>
+          
+          {/* Model Selector */}
+          <div className="relative">
+            <button
+              onClick={() => setOpenModelPopup(!openModelPopup)}
+              className="flex items-center gap-2 px-3 py-2 bg-[#2d2d2d] hover:bg-[#3d3d3d] text-gray-200 rounded-lg transition-colors duration-200"
             >
-              {userDetails?.firstName[0]} {userDetails?.lastName[0]}
-            </span>
+              <div className={`w-2 h-2 rounded-full ${models.find(m => m.id === selectedModel)?.color}`} />
+              <span className="text-sm font-medium">
+                {models.find(m => m.id === selectedModel)?.name}
+              </span>
+              <div size={14} />
+            </button>
+            
+            {/* Model Dropdown */}
+            {openModelPopup && (
+              <div className="absolute right-0 top-full mt-2 w-48 bg-[#2d2d2d] border border-[#3d3d3d] rounded-xl shadow-lg py-2 z-10">
+                {models.map((model) => (
+                  <button
+                    key={model.id}
+                    onClick={() => handleModelSelect(model.id)}
+                    className={`w-full flex items-center gap-3 px-4 py-2 hover:bg-[#3d3d3d] transition-colors duration-200 ${
+                      selectedModel === model.id ? 'bg-[#3d3d3d] text-blue-400' : 'text-gray-300'
+                    }`}
+                  >
+                    <div className={`w-2 h-2 rounded-full ${model.color}`} />
+                    <span className="text-sm font-medium">{model.name}</span>
+                    {model.icon}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
+      </div>
 
-        {/* Messages */}
-        <div className="chat-slider-messages" ref={messagesContainerRef}>
-          {Messages.length === 0 && selectedChatId === null ? (
-            <div className="no-chat">No chat here</div>
-          ) : (
-            Messages.map((msg, idx) => (
+      {/* Messages Area */}
+      <div 
+        ref={messagesContainerRef}
+        className="flex-1 overflow-y-auto px-4 py-6"
+      >
+        {!selectedChatId ? (
+          <div className="h-full flex flex-col items-center justify-center text-center">
+            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-4">
+              <FiMessageSquare className="text-white" size={24} />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-200 mb-2">How can I help you today?</h2>
+            <p className="text-gray-400 mb-6 max-w-md">
+              Choose a chat from the sidebar or create a new one to begin chatting with AI
+            </p>
+            <button
+              onClick={handleNewChat}
+              className="px-6 py-3 bg-[#2d2d2d] hover:bg-[#3d3d3d] text-gray-200 rounded-xl transition-colors duration-200 font-medium"
+            >
+              Start New Chat
+            </button>
+          </div>
+        ) : (
+          <div className="max-w-4xl mx-auto space-y-6">
+            {Messages && Messages.map((message) => (
               <div
-                key={idx}
-                className={`chat-message ${
-                  msg.role === "user" ? "user" : "model"
+                key={message._id}
+                className={`flex gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              >
+                {message.role !== 'user' && (
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                    <div className="text-white" size={16} />
+                  </div>
+                )}
+                
+                <div className={`max-w-[80%] ${message.role === 'user' ? 'order-1' : ''}`}>
+                  <div
+                    className={`rounded-2xl px-4 py-3 ${
+                      message.role === 'user'
+                        ? 'bg-[#2d2d2d] text-gray-200 ml-auto'
+                        : 'bg-transparent text-gray-200'
+                    }`}
+                  >
+                    {message.role === 'user' ? (
+                      <p className="whitespace-pre-wrap">{message.content}</p>
+                    ) : (
+                      <ReactMarkdown
+                        remarkPlugins={[remarkGfm]}
+                        components={{
+                          code({ node, inline, className, children, ...props }) {
+                            const match = /language-(\w+)/.exec(className || '');
+                            return !inline && match ? (
+                              <SyntaxHighlighter
+                                style={dracula}
+                                language={match[1]}
+                                PreTag="div"
+                                className="rounded-lg my-2"
+                                {...props}
+                              >
+                                {String(children).replace(/\n$/, '')}
+                              </SyntaxHighlighter>
+                            ) : (
+                              <code className=" text-green-600 px-1 py-0.5 rounded text-sm" {...props}>
+                                {children}
+                              </code>
+                            );
+                          },
+                        }}
+                      >
+                        {message.content}
+                      </ReactMarkdown>
+                    )}
+                  </div>
+                </div>
+                
+              
+              </div>
+            ))}
+            
+            {loading && (
+              <div className="flex gap-4 justify-start">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="text-white" size={16} />
+                </div>
+                <div className="bg-transparent rounded-2xl px-4 py-3">
+                  <div className="flex items-center gap-1">
+                    <div className="flex space-x-1">
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                      <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                    </div>
+                    <span className="text-gray-400 text-sm ml-2">AI is thinking...</span>
+                  </div>
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
+      </div>
+
+      {/* Input Area */}
+      {selectedChatId && (
+        <div className="border-t border-[#2d2d2d] bg-[#212121] p-4">
+          <div className="max-w-4xl mx-auto">
+            <div className="relative">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Message cyber-ai..."
+                className="w-full resize-none border border-[#3d3d3d] bg-[#2d2d2d] text-gray-200 placeholder-gray-500 rounded-2xl px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent min-h-[52px] max-h-32"
+                rows={1}
+                disabled={loading}
+              />
+              <button
+                onClick={handleSend}
+                disabled={!input.trim() || loading}
+                className={`absolute right-2 top-1/2 transform -translate-y-1/2 p-2 rounded-xl transition-all duration-200 ${
+                  input.trim() && !loading
+                    ? 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg'
+                    : 'bg-[#3d3d3d] text-gray-500 cursor-not-allowed'
                 }`}
               >
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    code({ node, inline, className, children, ...props }) {
-                      const match = /language-(\w+)/.exec(className || "");
-                      return !inline && match ? (
-                        <SyntaxHighlighter
-                          style={dracula}
-                          language={match[1]}
-                          PreTag="div"
-                          {...props}
-                        >
-                          {String(children).replace(/\n$/, "")}
-                        </SyntaxHighlighter>
-                      ) : (
-                        <code className="bg-gray-800 text-red-300 px-1 py-0.5 rounded">
-                          {children}
-                        </code>
-                      );
-                    },
-                  }}
-                >
-                  {msg.content}
-                </ReactMarkdown>
-              </div>
-            ))
-          )}
-
-          {loading && (
-            <div className="chat-message model typing-bubble">
-              <span className="typing-indicator">
-                <span className="dot"></span>
-                <span className="dot"></span>
-                <span className="dot"></span>
-              </span>
+                <FiSend size={16} />
+              </button>
             </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Input */}
-        <div className="chat-slider-input">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder="Type your message..."
-          />
-
-          {desktop ? (
-            <button className="inputbutton" onClick={handleSend}>
-              Send
-            </button>
-          ) : (
-            <button
-              className={`plusop ${open ? "open" : ""}`}
-              onClick={() => setOpen(!open)}
-            >
-              <span className="plus-icon"></span>
-            </button>
-          )}
-
-          <div className={`menu-popup ${open ? "visible" : ""}`}>
-            <div onClick={handleNewChat} className="menu-item">
-              <FiMessageSquare className="menu-icon" />
-              <span>Create chat</span>
-            </div>
-            <div
-              onClick={() => setOpenModelPopup(true)}
-              className="menu-item"
-            >
-              <FiCpu className="menu-icon" />
-              <span>Select model</span>
+            <div className="text-center mt-2">
+              <p className="text-xs text-gray-500">
+                cyber-ai can make mistakes. Check important info.
+              </p>
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Modal for Model Selection */}
-    {openModelPopup && (
-  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-    <div className="bg-[#1e1e1e] text-white p-6 rounded-2xl shadow-lg w-96">
-      <h2 className="text-xl font-semibold mb-4 text-center">
-        Select AI Model
-      </h2>
-
-      {/* Select model */}
-      <div className="flex flex-col gap-3">
-        <button
-          onClick={() => setSelectedModel("gemini")}
-          className={`px-4 py-2 rounded-lg border ${
-            selectedModel === "gemini"
-              ? "bg-[#3d3d3d] border-blue-600"
-              : "border-gray-500"
-          }`}
-        >
-          Gemini 2.0
-        </button>
-        <button
-          onClick={() => setSelectedModel("openai")}
-          className={`px-4 py-2 rounded-lg border ${
-            selectedModel === "openai"
-              ? "bg-[#272727] border-green-600"
-              : "border-gray-500"
-          }`}
-        >
-          OpenAI
-        </button>
-      </div>
-
-      {/* Footer buttons */}
-      <div className="flex justify-end gap-3 mt-6">
-        <button
-          onClick={() => setOpenModelPopup(false)}
-          className="px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600"
-        >
-          Cancel
-        </button>
-        <button
-          onClick={() => {
-            console.log("Confirmed model:", selectedModel);
-            setOpenModelPopup(false);
-          }}
-          className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500"
-        >
-          OK
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 }
+

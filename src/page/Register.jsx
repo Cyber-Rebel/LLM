@@ -2,7 +2,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { registerUser } from '../store/actions/useraction.jsx';
 
 const RegisterSimple = () => {
@@ -41,111 +41,179 @@ console.log(datas)
     reset()
    }
 
-
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0b0b0d] p-4">
-      <div className="max-w-xl w-full bg-[#121214] rounded-2xl shadow-lg p-8">
-        <h2 className="text-2xl font-semibold text-white mb-1">Create your Cyber AI account</h2>
-        <p className="text-sm text-gray-400 mb-6">
-          Sign up to save chats, sync settings and get personalised recommendations.
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
+          <p className="text-gray-600">Join us and start chatting with AI</p>
+        </div>
 
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label htmlFor="firstName" className="block text-sm text-gray-300 mb-1">First name</label>
-              <input
-                id="firstName"
-                {...register('firstName', { required: 'First name is required' })}
-                placeholder="Jane"
-                className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white focus:outline-none"
-              />
-              {errors.firstName && <p className="text-xs text-red-400 mt-1">{errors.firstName.message}</p>}
-            </div>
-
-            <div>
-              <label htmlFor="lastName" className="block text-sm text-gray-300 mb-1">Last name</label>
-              <input
-                id="lastName"
-                {...register('lastName', { required: 'Last name is required' })}
-                placeholder="Doe"
-                className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white focus:outline-none"
-              />
-              {errors.lastName && <p className="text-xs text-red-400 mt-1">{errors.lastName.message}</p>}
-            </div>
-          </div>
-
-          <div>
-            <label htmlFor="email" className="block text-sm text-gray-300 mb-1">Email</label>
-            <input
-              id="email"
-              type="email"
-              {...register('email', {
-                required: 'Email is required',
-                pattern: { value: /^\S+@\S+$/i, message: 'Enter a valid email' }
-              })}
-              placeholder="you@example.com"
-              className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white focus:outline-none"
-            />
-            {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email.message}</p>}
-          </div>
-
-          <div>
-            <label htmlFor="password" className="block text-sm text-gray-300 mb-1">Password</label>
-            <input
-              id="password"
-              type="password"
-              {...register('password', {
-                required: 'Password is required',
-                minLength: { value: 6, message: 'Minimum 6 characters' }
-              })}
-              placeholder="Create a strong password"
-              className="w-full px-3 py-2 rounded-lg bg-gray-800 text-white focus:outline-none"
-            />
-            {errors.password && <p className="text-xs text-red-400 mt-1">{errors.password.message}</p>}
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">Gender</label>
-            <div className="flex items-center gap-6">
-              <label className="flex items-center gap-2 text-white">
+        {/* Main Card */}
+        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Name Fields Row */}
+            <div className="grid grid-cols-2 gap-4">
+              {/* First Name */}
+              <div>
+                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                  First Name
+                </label>
                 <input
-                  type="radio"
-                  value="male"
-                  {...register('gender',{required:true} )}
-                  className="form-radio"
+                  id="firstName"
+                  type="text"
+                  {...register('firstName', {
+                    required: 'First name is required',
+                    minLength: { value: 2, message: 'First name must be at least 2 characters' }
+                  })}
+                  className={`w-full px-4 py-3 border rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    errors.firstName ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                  placeholder="John"
                 />
-                Male
-              </label>
+                {errors.firstName && (
+                  <p className="text-red-500 text-xs mt-1">{errors.firstName.message}</p>
+                )}
+              </div>
 
-              <label className="flex items-center gap-2 text-white">
+              {/* Last Name */}
+              <div>
+                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                  Last Name
+                </label>
                 <input
-                  type="radio"
-                  value="female"
-                  {...register('gender',{required:true  } )}
-                  className="form-radio"
+                  id="lastName"
+                  type="text"
+                  {...register('lastName', {
+                    required: 'Last name is required',
+                    minLength: { value: 2, message: 'Last name must be at least 2 characters' }
+                  })}
+                  className={`w-full px-4 py-3 border rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                    errors.lastName ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                  }`}
+                  placeholder="Doe"
                 />
-                Female
-              </label>
+                {errors.lastName && (
+                  <p className="text-red-500 text-xs mt-1">{errors.lastName.message}</p>
+                )}
+              </div>
             </div>
-            {errors.gender && <p className="text-xs text-red-400 mt-1">{errors.gender.message}</p>}
-          </div>
 
-          <div className="pt-4">
+            {/* Email */}
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                {...register('email', {
+                  required: 'Email is required',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Invalid email address'
+                  }
+                })}
+                className={`w-full px-4 py-3 border rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                }`}
+                placeholder="john@example.com"
+              />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+              )}
+            </div>
+
+            {/* Password */}
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                {...register('password', {
+                  required: 'Password is required',
+                  minLength: { value: 6, message: 'Password must be at least 6 characters' }
+                })}
+                className={`w-full px-4 py-3 border rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  errors.password ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                }`}
+                placeholder="Enter your password"
+              />
+              {errors.password && (
+                <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+              )}
+            </div>
+
+            {/* Gender */}
+            <div>
+              <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-2">
+                Gender
+              </label>
+              <select
+                id="gender"
+                {...register('gender', { required: 'Please select your gender' })}
+                className={`w-full px-4 py-3 border rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  errors.gender ? 'border-red-300 bg-red-50' : 'border-gray-200 hover:border-gray-300'
+                }`}
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+              </select>
+              {errors.gender && (
+                <p className="text-red-500 text-xs mt-1">{errors.gender.message}</p>
+              )}
+            </div>
+
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full px-4 py-3 rounded-full bg-indigo-600 text-white font-medium shadow-md hover:bg-indigo-700 transition disabled:opacity-60"
+              className={`w-full py-3 px-4 rounded-xl font-semibold text-white transition-all duration-200 ${
+                isSubmitting
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg transform hover:-translate-y-0.5'
+              } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2`}
             >
-              {isSubmitting ? 'Submitting...' : 'Create account'}
+              {isSubmitting ? (
+                <div className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating Account...
+                </div>
+              ) : (
+                'Create Account'
+              )}
             </button>
-          </div>
+          </form>
 
-          <p className="text-sm text-gray-400 text-center mt-3">
-            Already have an account? <a href="/login" className="text-indigo-300 underline">Login</a>
+          {/* Login Link */}
+          <div className="mt-6 text-center">
+            <p className="text-gray-600">
+              Already have an account?{' '}
+              <Link
+                to="/login"
+                className="text-blue-600 hover:text-blue-700 font-semibold transition-colors duration-200"
+              >
+                Sign in
+              </Link>
+            </p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="text-center mt-8">
+          <p className="text-xs text-gray-500">
+            By creating an account, you agree to our Terms of Service and Privacy Policy
           </p>
-        </form>
+        </div>
       </div>
     </div>
   );
