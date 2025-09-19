@@ -46,7 +46,7 @@ export default function ChatMessages({
 
   useEffect(() => {
     const handleAiResponse = (data) => {
-      // console.log("AI Response 48:", data);
+      console.log("AI Response:", data);
       dispatch(
         addNewMessage({
           _id: Date.now().toString(),
@@ -55,7 +55,6 @@ export default function ChatMessages({
           role: "model",
         })
       );
-      
       if (data) {
         setLoading(false);
       }
@@ -81,7 +80,6 @@ export default function ChatMessages({
       content: input,
       model: selectedModel, // model bhej raha hai
     });
-    
     dispatch(
       addNewMessage({
         _id: Date.now().toString(),
@@ -210,7 +208,7 @@ export default function ChatMessages({
                     {message.role === 'user' ? (
                       <p className="whitespace-pre-wrap">{message.content}</p>
                     ) : (
-                      <ReactMarkdown
+                      <ReactMarkdown 
                         remarkPlugins={[remarkGfm]}
                         components={{
                           code({ node, inline, className, children, ...props }) {

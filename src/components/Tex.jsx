@@ -52,7 +52,12 @@ const Home = () => {
 
 // console.log(desktop)
 
-  return (<>
+  return (<>{loading?(<div>
+  <div className="flex items-center justify-center min-h-screen bg-[#1B1E24]">
+    div
+<img className="w-60 h-60" src="logo3.png" alt="" />    
+    </div>
+  </div>):
     <div className="flex h-screen bg-[#212121] overflow-hidden">
       {/* Sidebar */}
       <ChatSlider userDetails={userDetails} desktop={desktop} chats={chats} selectedChatId={selectedChatId} />
@@ -68,7 +73,7 @@ const Home = () => {
           selectedChatId={selectedChatId}    
         />
       </div>
-    </div>
+    </div>}
     </>
   );
 };
