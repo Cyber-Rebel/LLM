@@ -52,6 +52,25 @@ async function getMessages(req, res) {
 
 }
 
+
+async function deleteChat(req, res) {
+    const chatId = req.params.id;
+    const userId = req.user._id;
+
+    // Verify that the chat belongs to the user
+    const chat = await chatModel.findOne({ _id: chatId, user: userId });
+    if (!chat) {
+        return res.status(404).json({ message: "Chat not found or you do not have permission to delete it." });
+    }
+
+    // Delete the chat and its associated messages
+    await messageModel.deleteMany({ chat: chatId });
+    await chatModel.deleteOne({ _id: chatId });
+
+    res.status(200).json({ message: "Chat and its messages deleted successfully." });
+
+}
+
 module.exports={
-    createChat,getChats,getMessages
+    createChat,getChats,getMessages ,deleteChat
 }

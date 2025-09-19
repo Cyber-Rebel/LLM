@@ -94,7 +94,14 @@ const authdata = async(req,res)=>{
       
     }
   })
+  
 }
+const logout = async(req,res)=>{ 
+ res.clearCookie('token') // cookie clear karne ke liye
+ res.status(200).json({
+  message:"user logout succesfully"
+
+ })}
 
 
 
@@ -107,5 +114,6 @@ const authdata = async(req,res)=>{
 module.exports={
   SingupHandler,
     LoginHandler
-    ,authdata
+    ,authdata,
+    logout
 }
